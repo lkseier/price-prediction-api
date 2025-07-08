@@ -1,0 +1,36 @@
+# Core Python
+numpy==1.26.4
+pandas==2.2.2
+tqdm==4.66.4
+pyyaml==6.0.1
+openpyxl==3.1.2
+
+# Visualization
+matplotlib>=3.7.1
+seaborn>=0.12.2
+missingno==0.5.2
+rich==13.7.1
+
+# Machine Learning
+scikit-learn==1.4.2
+joblib==1.4.2
+xgboost==3.0.2
+lightgbm==4.3.0
+catboost==1.2.3
+optuna==3.6.1
+shap==0.45.1
+
+# API & UI
+fastapi==0.111.0
+uvicorn==0.29.0
+streamlit==1.35.0
+
+# Dev & Linting
+black==24.4.2
+isort==5.13.2
+flake8==7.0.0
+mypy==1.10.0
+
+# Build
+pip==25.1.1
+pip-tools==7.4.1
