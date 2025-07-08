@@ -10,45 +10,42 @@ from src.load_dataset_and_clean import LoadDatasetAndClean
 from src.preprocess_for_ml import PreprocessorForML
 from src.train_model import TrainModel
 
-
 def main_menu():
     while True:
-        print("\nMain Menu ---")
-        print("1. Load dataset and clean")
-        print("2. Preprocess data for ML")
-        print("3. Train CatBoost model with Optuna")
-        print("4. Exit")
+        print("\n\033[1;34m=== Main Menu ===\033[0m")  # Bold Blue Title
+        print("\033[1;34m1. Load dataset and clean\033[0m")             # Bold Blue
+        print("\033[1;34m2. Preprocess data for ML\033[0m")             # Bold Blue
+        print("\033[1;34m3. Train CatBoost model with Optuna\033[0m")   # Bold Blue
+        print("\033[1;31m4. Exit\033[0m")                                # Bold Red
 
-        choice = input("Enter your choice (1-4): ").strip()
+        choice = input("\n\033[1;34mEnter your choice (1-4): \033[0m").strip()
 
         if choice == "1":
-            print("\n[INFO] Running dataset cleaning...")
+            print("\n\033[1;36m[INFO] Running dataset cleaning...\033[0m")
             cleaner = LoadDatasetAndClean()
             cleaner.run()
-            print("[INFO] Dataset cleaning complete.")
+            print("\033[1;32m[INFO] Dataset cleaning complete.\033[0m")
 
         elif choice == "2":
-            print("\n[INFO] Running preprocessing for ML...")
+            print("\n\033[1;36m[INFO] Running preprocessing for ML...\033[0m")
             preprocessor = PreprocessorForML()
             preprocessor.run_all()
-            print("[INFO] Preprocessing complete.")
+            print("\033[1;32m[INFO] Preprocessing complete.\033[0m")
 
         elif choice == "3":
-            print("\n[INFO] Starting training...")
-            trainer = TrainModel(
-                data_path="data/ml_ready/immoweb_real_estate_ml_ready.csv",
-                target_column="price",
-                model_output_path="models/catboost_model.pkl"
-            )
+            print("\n\033[1;36m[INFO] Starting training...\033[0m")
+            trainer = TrainModel()
             trainer.tune_and_train(n_trials=30)
-            print("[INFO] Training complete.")
+            print("\033[1;32m[INFO] Training complete.\033[0m")
 
         elif choice == "4":
-            print("Exiting program.")
+            print("\033[1;31mExiting program.\033[0m")
             sys.exit(0)
 
         else:
-            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+            print("\033[1;31mInvalid choice. Please enter 1, 2, 3, or 4.\033[0m")
+
+
 
 
 if __name__ == "__main__":

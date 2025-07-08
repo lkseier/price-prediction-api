@@ -21,7 +21,7 @@ print_error() {
     echo ""
     echo -e "${RED_BG}${WHITE_TEXT}>>> ERROR: $1${RESET}"
     echo ""
-    exit 12
+    exit 1
 }
 
 # === Activate the virtual environment ===
@@ -38,4 +38,4 @@ print_green "Running the main menu (main.py)..."
 python -m src.main || print_error "main.py execution failed"
 
 # === Done ===
-print_green "Executi_
+print_green "Execution completed successfully."

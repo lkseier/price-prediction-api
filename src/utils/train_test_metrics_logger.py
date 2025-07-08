@@ -208,7 +208,7 @@ class TrainTestMetricsLogger:
         df_disp = self.format_metrics_k_euro(df_disp)
 
         # Add Rank and Best columns
-        df_disp = df_disp.reset_index(drop=True)  # important to reset index and drop old index
+        df_disp = df_disp.reset_index(drop=True)
         df_disp["Rank"] = df_disp.index + 1
         df_disp["Best"] = ""
         if not df_disp.empty:
@@ -220,48 +220,44 @@ class TrainTestMetricsLogger:
             cols = ["Rank", "Best"] + [c for c in cols if c not in ["Rank", "Best"]]
             df_disp = df_disp[cols]
 
-        # Remove unwanted columns before styling!
+        # Remove unwanted columns before styling
         for col_to_drop in ['data_file', 'data_file_timestamp', 'test_mode', 'experiment']:
             if col_to_drop in df_disp.columns:
                 df_disp = df_disp.drop(columns=[col_to_drop])
 
-        # Columns to color
         train_cols = ['mae_train', 'rmse_train', 'r2_train']
         test_cols = ['mae_test', 'rmse_test', 'r2_test']
 
-        # Calculate 1-based indices for CSS nth-child (no index column now)
         col_indices = {col: i+1 for i, col in enumerate(df_disp.columns)}
 
-        # Build header styles
         custom_header_styles = []
         for col in train_cols:
             if col in col_indices:
                 nth = col_indices[col]
                 custom_header_styles.append({
                     'selector': f'th.col_heading.level0:nth-child({nth})',
-                    'props': [('background-color', '#fff9c4')]  # pale yellow
+                    'props': [('background-color', '#fff9c4')]
                 })
         for col in test_cols:
             if col in col_indices:
                 nth = col_indices[col]
                 custom_header_styles.append({
                     'selector': f'th.col_heading.level0:nth-child({nth})',
-                    'props': [('background-color', '#f9c5c0')]  # light coral
+                    'props': [('background-color', '#f9c5c0')]
                 })
 
-        # Interpretation color map
         interpretation_colors = {
             "good generalization": "background-color: #1976d2; color: white",
             "overfitting": "background-color: #1565c0; color: white",
             "underfitting": "background-color: #90caf9; color: black",
             "unstable": "background-color: #90caf9; color: black",
         }
+
         def highlight_interpretation(val):
             return interpretation_colors.get(val, "")
 
         styler = df_disp.style
 
-        # Apply row coloring for best ranking (first, so it can be overridden)
         def color_rank(row):
             if row["Rank"] == 1:
                 return ['background-color: #4caf50; color: white' for _ in row]
@@ -273,15 +269,8 @@ class TrainTestMetricsLogger:
                 return ['' for _ in row]
 
         styler = styler.apply(color_rank, axis=1)
-
-        # Then apply interpretation cell coloring (to overwrite rank colors if overlapping)
-        #styler = styler.applymap(highlight_interpretation, subset=['interpretation'])
         styler = styler.map(highlight_interpretation, subset=['interpretation (r2,mae_gap)'])
-
-        # Apply header coloring styles
         styler = styler.set_table_styles(custom_header_styles)
-
-        # Hide the dataframe index column (0,1,2,...) in the output
         styler = styler.hide(axis='index')
 
         diagnostic_colors = {
@@ -292,12 +281,15 @@ class TrainTestMetricsLogger:
             "Possible underfitting": "background-color: #90caf9; color: black"
         }
 
-        # Appliquer la couleur à la colonne r2_gap_diagnostic
         def highlight_r2_gap_diagnostic(val):
             return diagnostic_colors.get(val, "")
 
         if "r2_gap_diagnostic" in df_disp.columns:
             styler = styler.map(highlight_r2_gap_diagnostic, subset=['r2_gap_diagnostic'])
+
+        # 🔸 PRINT for terminal output
+        print("\n=== Training Summary ===")
+        print(df_disp.to_string(index=False))
 
         return styler
 
