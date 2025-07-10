@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from typing import List, Union
+import pandas as pd
 
 from preprocessing.cleaning_data import preprocess_input, PropertyInput
 from predict.prediction import predict
